@@ -1,0 +1,1 @@
+{"schemaVersion":1,"eventName":"command_invoked","surface":"cli","surfaceVersion":"0.99.7","installId":"1b3a93db-dd85-4527-9180-8e2d2a535074","os":"darwin","arch":"x64","runtimeVersion":"node-22.22.3","env":"prod","tsIso":"2026-07-18T05:01:58.399Z","accountId":null,"properties":{"command":"mcp","duration_ms":2174,"ok":true}}
