@@ -1,0 +1,31 @@
+{
+  "name": "pai-agent-kit",
+  "version": "0.1.0",
+  "description": "Open-source framework for building AI agents on Pi Network",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "clean": "npm run clean --workspaces"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pai-list/agent-kit"
+  },
+  "keywords": [
+    "pi-network",
+    "ai-agents",
+    "blockchain",
+    "identity",
+    "pai",
+    "axiomid"
+  ],
+  "license": "PiOS",
+  "engines": {
+    "node": ">=18"
+  }
+}

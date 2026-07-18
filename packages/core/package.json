@@ -1,0 +1,16 @@
+{
+  "name": "@pai/core",
+  "version": "0.1.0",
+  "description": "PAI Agent Kit — Core runtime and Pi SDK integration",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
