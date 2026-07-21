@@ -1,0 +1,41 @@
+{
+  "name": "pai-agentkit",
+  "main": "src/index.ts",
+  "compatibility_date": "2024-12-01",
+  "compatibility_flags": ["nodejs_compat"],
+  
+  "durable_objects": {
+    "bindings": [
+      { "name": "AGENT", "class_name": "ZeroCostAgent" }
+    ]
+  },
+  "exports": {
+    "ZeroCostAgent": { "type": "durable-object", "storage": "sqlite" }
+  },
+  
+  "d1_databases": [
+    { "binding": "DB", "database_name": "pai-shared", "database_id": "auto" }
+  ],
+  
+  "kv_namespaces": [
+    { "binding": "SESSIONS", "id": "auto" }
+  ],
+  
+  "r2_buckets": [
+    { "binding": "ARTIFACTS", "bucket_name": "pai-artifacts" }
+  ],
+  
+  "vectorize": [
+    { "binding": "MEMORY", "index_name": "pai-memory", "dimensions": 768, "metric": "cosine" }
+  ],
+  
+  "ai": { "binding": "AI" },
+  
+  "send_email": [{ "name": "EMAIL", "remote": true }],
+  
+  "vars": {
+    "FRAMEWORK_VERSION": "0.1.0",
+    "MAX_FREE_MEMORY": "5000",
+    "DEFAULT_MODEL": "@cf/meta/llama-3.1-8b-instruct"
+  }
+}
