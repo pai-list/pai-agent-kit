@@ -11,11 +11,11 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "agents": "latest"
+    "agents": "^0.17.4"
   },
   "devDependencies": {
-    "wrangler@^4.45.0": "latest",
-    "@cloudflare/workers-types": "latest",
-    "typescript@^5.7.0": "latest"
+    "wrangler": "^4.113.0",
+    "@cloudflare/workers-types": "^5.20260722.1",
+    "typescript": "^5.7.0"
   }
 }
