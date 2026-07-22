@@ -329,6 +329,53 @@ export class ZeroCostAgent extends Agent<Env, ZeroCostState> {
 }
 
 // ─── Agent Factory ─────────────────────────────────────────────
+
+  // ── Layer 4b: Dhravya Shah Token Delta Engine & Scoped Memory ──
+  async compressDeltaHistory(messages: { role: string; content: string }[], maxTokens = 2048): Promise<{ role: string; content: string }[]> {
+    if (messages.length <= 4) return messages;
+    
+    const systemMsg = messages.find(m => m.role === "system");
+    const userPrompt = messages[messages.length - 1];
+    const historyToCompress = messages.slice(systemMsg ? 1 : 0, messages.length - 1);
+    
+    const historyText = historyToCompress.map(m => `[${m.role}]: ${m.content}`).join("\n");
+    let compressedSummary = "";
+    
+    if (this.env.AI) {
+      try {
+        const summaryRes = await this.env.AI.run("@cf/meta/llama-3.1-8b-instruct", {
+          messages: [
+            { role: "system", content: "You are a memory compression engine. Summarize essential key facts, decisions, and context in under 150 words." },
+            { role: "user", content: historyText }
+          ]
+        });
+        compressedSummary = (summaryRes as any).response || "";
+      } catch (e) {
+        compressedSummary = historyText.slice(-500);
+      }
+    }
+    
+    const result = [];
+    if (systemMsg) result.push(systemMsg);
+    if (compressedSummary) {
+      result.push({ role: "system", content: `[Compressed History Context]: ${compressedSummary}` });
+    }
+    result.push(userPrompt);
+    return result;
+  }
+
+  // Scoped Container Tag Vector Storage (Dhravya Shah Pattern)
+  async scopedSemanticStore(did: string, key: string, content: string) {
+    const containerTag = `user_${did}`;
+    if (!this.env.MEMORY || !this.env.AI) return;
+    const emb = await this.env.AI.run("@cf/baai/bge-base-en-v1.5", { text: [content] });
+    await this.env.MEMORY.upsert([{
+      id: `${containerTag}_${key}_${Date.now()}`,
+      values: emb.data[0],
+      metadata: { did, containerTag, content, createdAt: Date.now() }
+    }]);
+  }
+
 export function spawnAgent(env: Env, name: string): DurableObjectStub<ZeroCostAgent> {
   const id = env.AGENT.idFromName(name);
   return env.AGENT.get(id);
