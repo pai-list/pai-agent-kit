@@ -1,44 +1,87 @@
-# ۞ PAI-AGENT-KIT
+<!-- ═══════════ PAI-AGENT-KIT · Zero-Cost Agent Runtime ═══════════ -->
+<!-- Stack: TypeScript, Cloudflare DO, Vectorize, R2        -->
+<!-- Updated: 23 July 2026                                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
 
-> **PAI Agent Kit — Serverless Agent Runtime with 7-Layer Sovereign Storage & DO Delta Engine**  
-> **Architecture:** PAI-SAAM (Serverless Agentic Application Model) & 7-Layer Storage Matrix  
-> **Governance Standard:** Soul & Conscience Substrate (IQRA Protocol)  
-> **Organization:** [pai-list](https://github.com/pai-list) · **Enterprise:** pai-bye
+<div align="center">
+  <img src="https://img.shields.io/badge/status-alpha-FF6B6B?style=flat-square&labelColor=0D1117" />
+  <img src="https://img.shields.io/github/license/pai-list/pai-agent-kit?style=flat-square&color=00A36C&labelColor=0D1117" />
+  <img src="https://img.shields.io/github/stars/pai-list/pai-agent-kit?style=flat-square&logo=github&color=FFD700&labelColor=0D1117" />
+  <img src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&labelColor=0D1117" />
+</div>
 
----
+# ۞ PAI Agent Kit
 
-## 🏛️ Ecosystem Overview
+**Zero-cost serverless agent runtime — Vectorize memory, Durable Objects state, Token Delta Engine, and Al-Mizan model routing.**
 
-`pai-agent-kit` is a core component of the **PAI Ecosystem**, delivering serverless agentic infrastructure designed for **Cost-Optimized Model Arbitrage** and **Zero-Sybil Sovereign Identity**.
-
-### 🗄️ Integrated 7-Layer Sovereign Storage Matrix
-
-1. **Layer 1 (Edge Ephemeral):** Cloudflare KV & Durable Objects (sub-ms session locks)
-2. **Layer 2 (Relational State):** Cloudflare D1 SQL (500MB DB)
-3. **Layer 3 (Agentic Database):** **[Ghost.build](https://ghost.build)** (1 TB Free Storage, 100 hrs/mo, Unlimited Forks)
-4. **Layer 4 (Vector Memory):** Tembo `pgvector` & Cloudflare Vectorize (Semantic RAG)
-5. **Layer 5 (Versioned Diffs):** [GitHub Gists](https://gist.github.com) (Agent review diffs & CI traces)
-6. **Layer 6 (Web Drives & Sites):** **[Here.now](https://here.now/docs)** (Instant static agent web hosting)
-7. **Layer 7 (Sovereign Vault):** Ed25519 WebCrypto & Local Memory Vault ([`openidentity.md`](https://github.com/pai-list/openidentity.md))
+The PAI Agent Kit is the runtime layer that powers every agent in the PAI ecosystem. It provides the core execution environment, memory management (via Cloudflare Vectorize + R2), state persistence (Durable Objects), and intelligent model routing across US, China, and MENA regions.
 
 ---
 
-## ⚖️ PAI-AL-MIZAN Model Arbitrage Engine
+## ❯ Core Modules
 
-Supports multi-regional intelligent routing across:
-- **US Layer:** OpenAI (`gpt-4o`), Cloudflare Workers AI, Groq
-- **China Layer:** DeepSeek API (`deepseek-r1`), Alibaba DashScope (70M Dev Tokens), Together AI
-- **MENA Layer:** Jais 30B, Falcon 180B, IQRA Conscience Substrate
-
----
-
-## 🛡️ Identity & Verification
-
-- **W3C DIDs:** `did:axiom:pi:${uid}` ➔ `did:axiom:agent:${agentId}`
-- **KYC ➔ KYA Bridge:** Building directly on **Pi Network's 18.1M+ KYC-verified humans**.
+| Module | File | Purpose |
+|:-------|:-----|:--------|
+| Al-Mizan Router | `src/al-mizan-router.ts` | Tri-regional model arbitrage (US/CN/MENA) |
+| Framework Core | `src/framework-core.ts` | Agent lifecycle & execution engine |
+| PAI Alpha Agent | `src/pai-alpha-agent.ts` | Reference agent implementation |
+| 7-Layer Storage | `src/seven-layer-storage.ts` | KV → D1 → Ghost → Vectorize → Gists → Here → Vault |
+| Token Calculator | `src/token-calculator.ts` | Cost estimation per model/provider |
 
 ---
 
-## 📄 License
+## ❯ Quick Start
+
+```bash
+npm install
+npx wrangler deploy
+```
+
+---
+
+## ❯ Architecture
+
+```
+Agent Request
+    │
+    ▼
+pai-agent-kit (Cloudflare Worker + DO)
+    │
+    ├── al-mizan-router → selects best model/region
+    ├── framework-core → executes agent loop
+    ├── seven-layer-storage → manages memory tier
+    └── token-calculator → estimates cost
+    │
+    ▼
+Response + state + memory
+```
+
+---
+
+## ❯ Al-Mizan Router
+
+Routes inference requests across regions based on cost, latency, and capability:
+
+| Region | Providers | Strategy |
+|:-------|:----------|:---------|
+| 🇺🇸 US | OpenAI, Workers AI, Groq | Quality-first |
+| 🇨🇳 China | DeepSeek, Alibaba DashScope | Cost-arbitrage |
+| 🇲🇦 MENA | Jais, Falcon, IQRA | Cultural alignment |
+
+---
+
+## ❯ Related
+
+- [`pai-list/pai-mcp`](https://github.com/pai-list/pai-mcp) — MCP gateway layer
+- [`pai-list/pai-cli`](https://github.com/pai-list/pai-cli) — CLI for agent management
+- [`pai-list/pai-rehearse`](https://github.com/pai-list/pai-rehearse) — Cognitive pre-simulation
+
+---
+
+## ❯ License
 
 MIT © [PAI Ecosystem](https://github.com/pai-list)
+
+---
+
+*Run agents. Zero cost. Global reach.*
