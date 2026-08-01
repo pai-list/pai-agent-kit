@@ -1,5 +1,7 @@
 name: "Detect Changes"
 description: "Classify changed files into CI lanes for PAI universe repos"
+on:
+  workflow_call:
 inputs:
   github-token:
     description: "GitHub token for API access"
