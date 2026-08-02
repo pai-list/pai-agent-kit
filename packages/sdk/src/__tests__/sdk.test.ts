@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { AxiomSDK, AxiomIDError } from "../client";
 
 const mockPassport = {
@@ -59,15 +60,14 @@ const mockSkillsResponse = {
 
 describe("@axiomid/sdk", () => {
   let sdk: AxiomSDK;
-  let fetchSpy: jest.SpyInstance;
 
   beforeEach(() => {
     sdk = new AxiomSDK({ network: "mainnet" });
-    fetchSpy = jest.spyOn(global, "fetch");
+    vi.spyOn(global, "fetch");
   });
 
   afterEach(() => {
-    fetchSpy.mockRestore();
+    vi.restoreAllMocks();
   });
 
   describe("constructor", () => {
@@ -89,7 +89,7 @@ describe("@axiomid/sdk", () => {
 
   describe("verifyPassport", () => {
     it("returns a passport for a valid slug", async () => {
-      fetchSpy.mockResolvedValueOnce({
+      vi.spyOn(global, "fetch").mockResolvedValueOnce({
         ok: true,
         json: async () => mockPassport,
       });
@@ -103,7 +103,7 @@ describe("@axiomid/sdk", () => {
     });
 
     it("throws AxiomIDError on 404", async () => {
-      fetchSpy.mockResolvedValueOnce({
+      vi.spyOn(global, "fetch").mockResolvedValueOnce({
         ok: false,
         status: 404,
         statusText: "Not Found",
@@ -114,7 +114,7 @@ describe("@axiomid/sdk", () => {
     });
 
     it("includes the piWalletAddress field on the returned passport", async () => {
-      fetchSpy.mockResolvedValueOnce({
+      vi.spyOn(global, "fetch").mockResolvedValueOnce({
         ok: true,
         json: async () => mockPassport,
       });
@@ -125,7 +125,7 @@ describe("@axiomid/sdk", () => {
 
     it("does not fall back to a legacy stellarAddress field for piWalletAddress", async () => {
       const { piWalletAddress, ...rest } = mockPassport;
-      fetchSpy.mockResolvedValueOnce({
+      vi.spyOn(global, "fetch").mockResolvedValueOnce({
         ok: true,
         json: async () => ({ ...rest, stellarAddress: piWalletAddress }),
       });
@@ -136,43 +136,43 @@ describe("@axiomid/sdk", () => {
 
     it("passes Authorization header when apiKey is set", async () => {
       const authedSdk = new AxiomSDK({ network: "mainnet", apiKey: "test-key" });
-      fetchSpy.mockResolvedValueOnce({
+      vi.spyOn(global, "fetch").mockResolvedValueOnce({
         ok: true,
         json: async () => mockPassport,
       });
 
       await authedSdk.verifyPassport("pioneer.username");
-      expect(fetchSpy).toHaveBeenCalledWith(
+      expect(global.fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           headers: expect.objectContaining({
             Authorization: "Bearer test-key",
           }),
-        })
+        }),
       );
     });
 
     it("omits Authorization header when no apiKey", async () => {
-      fetchSpy.mockResolvedValueOnce({
+      vi.spyOn(global, "fetch").mockResolvedValueOnce({
         ok: true,
         json: async () => mockPassport,
       });
 
       await sdk.verifyPassport("pioneer.username");
-      expect(fetchSpy).toHaveBeenCalledWith(
+      expect(global.fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           headers: expect.not.objectContaining({
             Authorization: expect.anything(),
           }),
-        })
+        }),
       );
     });
   });
 
   describe("getStamps", () => {
     it("parses stamps from passport", async () => {
-      fetchSpy.mockResolvedValueOnce({
+      vi.spyOn(global, "fetch").mockResolvedValueOnce({
         ok: true,
         json: async () => mockPassport,
       });
@@ -183,7 +183,7 @@ describe("@axiomid/sdk", () => {
     });
 
     it("returns unverified stamps when passport has none", async () => {
-      fetchSpy.mockResolvedValueOnce({
+      vi.spyOn(global, "fetch").mockResolvedValueOnce({
         ok: true,
         json: async () => ({ ...mockPassport, stamps: [] }),
       });
@@ -196,7 +196,7 @@ describe("@axiomid/sdk", () => {
 
   describe("resolveDID", () => {
     it("returns a DID document", async () => {
-      fetchSpy.mockResolvedValueOnce({
+      vi.spyOn(global, "fetch").mockResolvedValueOnce({
         ok: true,
         json: async () => mockDID,
       });
@@ -210,7 +210,7 @@ describe("@axiomid/sdk", () => {
 
   describe("getTrustScore", () => {
     it("returns a trust score from passport endpoint", async () => {
-      fetchSpy.mockResolvedValueOnce({
+      global.fetch = vi.fn().mockResolvedValueOnce({
         ok: true,
         json: async () => ({
           did: "did:axiom:pioneer.username",
@@ -237,7 +237,7 @@ describe("@axiomid/sdk", () => {
 
   describe("searchSkills", () => {
     it("returns matching skills", async () => {
-      fetchSpy.mockResolvedValueOnce({
+      vi.spyOn(global, "fetch").mockResolvedValueOnce({
         ok: true,
         json: async () => mockSkillsResponse,
       });

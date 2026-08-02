@@ -20,7 +20,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "jest --runInBand --forceExit",
+    "test": "vitest run",
     "type-check": "tsc --noEmit"
   },
   "keywords": [
@@ -39,11 +39,9 @@
   },
   "author": "Mohamed Abdelaziz <https://github.com/Moeabdelaziz007>",
   "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "@types/node": "^25",
-    "jest": "^30.4.2",
-    "ts-jest": "^29.4.0",
-    "typescript": "^5"
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
   },
   "engines": {
     "node": ">=20.0.0"

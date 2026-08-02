@@ -62,7 +62,7 @@ describe("@axiomid/crypto package.json", () => {
 
   it("retains build/test/type-check scripts", () => {
     expect(pkg.scripts.build).toBe("tsc");
-    expect(pkg.scripts.test).toBe("jest --runInBand --forceExit");
+    expect(pkg.scripts.test).toBe("vitest run");
     expect(pkg.scripts["type-check"]).toBe("tsc --noEmit");
   });
 
@@ -88,12 +88,10 @@ describe("@axiomid/crypto package.json", () => {
     expect(pkg.license).toBe("MIT");
   });
 
-  it("declares the jest/ts-jest/typescript toolchain used by the test script", () => {
+  it("declares the vitest/typescript toolchain used by the test script", () => {
     expect(pkg.devDependencies).toMatchObject({
-      jest: expect.any(String),
-      "ts-jest": expect.any(String),
+      vitest: expect.any(String),
       typescript: expect.any(String),
-      "@types/jest": expect.any(String),
       "@types/node": expect.any(String),
     });
   });
@@ -109,7 +107,7 @@ describe("@axiomid/crypto package.json", () => {
     expect(pkg.main).not.toBe("src/index.ts");
     expect(pkg.types).not.toBe("src/index.ts");
     expect(pkg.main).not.toMatch(/\.ts$/);
-    expect(pkg.types).not.toMatch(/\.ts$/);
+    expect(pkg.types).toMatch(/\.d\.ts$/); // Declaration file should end with .d.ts
   });
 
   it("regression: private is strictly the boolean false, not a truthy/string value", () => {
