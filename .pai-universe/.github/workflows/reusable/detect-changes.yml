@@ -1,0 +1,85 @@
+name: "Detect Changes"
+description: "Classify changed files into CI lanes for PAI universe repos"
+on:
+  workflow_call:
+    inputs:
+      github-token:
+        description: "GitHub token for API access"
+        required: true
+        type: string
+      base-ref:
+        description: "Base ref for comparison (default: main)"
+        required: false
+        type: string
+        default: "main"
+      head-ref:
+        description: "Head ref for comparison (default: PR head or current commit)"
+        required: false
+        type: string
+        default: ""
+    outputs:
+      node:
+        description: "Node/TS changes (packages, apps)"
+        value: ${{ jobs.detect.outputs.node }}
+      nextjs:
+        description: "Next.js app changes"
+        value: ${{ jobs.detect.outputs.nextjs }}
+      cf-workers:
+        description: "Cloudflare Workers changes"
+        value: ${{ jobs.detect.outputs.cf-workers }}
+      mono:
+        description: "Monorepo root changes (package.json, pnpm-workspace, turbo.json)"
+        value: ${{ jobs.detect.outputs.mono }}
+      docs:
+        description: "Documentation changes"
+        value: ${{ jobs.detect.outputs.docs }}
+      config:
+        description: "Config/CI changes (turbo, eslint, tsconfig, workflows)"
+        value: ${{ jobs.detect.outputs.config }}
+      security:
+        description: "Security-sensitive files (auth, crypto, keys, tokens)"
+        value: ${{ jobs.detect.outputs.security }}
+      deps:
+        description: "Dependency changes"
+        value: ${{ jobs.detect.outputs.deps }}
+      ci-review:
+        description: "CI-sensitive files requiring maintainer review"
+        value: ${{ jobs.detect.outputs.config }}
+      changed-files:
+        description: "JSON array of changed file paths"
+        value: ${{ jobs.detect.outputs.changed-files }}
+      event-name:
+        description: "GitHub event name"
+        value: ${{ jobs.detect.outputs.event-name }}
+permissions:
+  contents: read
+jobs:
+  detect:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Detect and classify changes
+        id: detect
+        uses: ./.pai-universe/.github/actions/detect-changes
+        with:
+          github-token: ${{ inputs.github-token }}
+          base-ref: ${{ inputs.base-ref }}
+          head-ref: ${{ inputs.head-ref }}
+
+    outputs:
+      node: ${{ steps.detect.outputs.node }}
+      nextjs: ${{ steps.detect.outputs.nextjs }}
+      cf-workers: ${{ steps.detect.outputs.cf-workers }}
+      mono: ${{ steps.detect.outputs.mono }}
+      docs: ${{ steps.detect.outputs.docs }}
+      config: ${{ steps.detect.outputs.config }}
+      security: ${{ steps.detect.outputs.security }}
+      deps: ${{ steps.detect.outputs.deps }}
+      changed-files: ${{ steps.detect.outputs.changed-files }}
+      event-name: ${{ steps.detect.outputs.event-name }}
